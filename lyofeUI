@@ -1,1 +1,169 @@
+if not LPH_OBFUSCATED then
+    LPH_NO_VIRTUALIZE = function(...) return(...) end;
+end
+--Locals--
+local Players = game:GetService("Players")
+local plr = Players.LocalPlayer
+local Player = Players.LocalPlayer
+local speaker = Players.LocalPlayer
+local LocalPlayer = Players.LocalPlayer
+local LocalCharacter = Players.LocalPlayer.Character
+local Humanoid = Players.LocalPlayer.Character.Humanoid
+local player = Players.LocalPlayer
+local playerGui = player.PlayerGui
+local frames = playerGui:GetDescendants()
+local Pllayyers = Players
+local Mouse = Players.LocalPlayer:GetMouse()
+repeat wait() until Mouse
+local playerseclet = Players.LocalPlayer.Name
+local plr = Players.LocalPlayer
+local propClient = plr.PlayerGui.PropertyPurchasingGUI.PropertyPurchasingClient
+local propEnvironment = getsenv(propClient)
+local HumRoot = Player.Character.HumanoidRootPart
+local Hum = Player.Character.Humanoid
+local oldPurchase = propEnvironment.enterPurchaseMode
+local Day = false
+local Betterselection;
+local Speed = nil;
+local maxspeed = 250
+Players = game:GetService("Players")
+IYMouse = Players.LocalPlayer:GetMouse()
+speaker = Players.LocalPlayer
+QEfly = true
+StandPlank = false
+local AbortAutoBuy = false
+local CustomDragger = false
+local NewPlankAdded = false
+local CuttingTree = false
+local GetTreeAmount
+local SelectedTreeType
+local SlotNumber
+local SelectedTree
+local FLYING = false
+local VehicleSpawnerVal
+local SelectedSpawnColor = nil
+local VehicleRespawnedColor
+local RespawnedCar
+flinging = false
+local AbortVehicleSpawner = false
+local SelectedSpawnPad
+local SelectedWireType
+local SelectedWire
+local FlyingEnabled = false
+local TreeAdded
+local OldPos
+local TreeChopped = false
+local AbortGetTree = false
+local CustomDragger = false;
+local AmountToBuy = 1
+local ItemList = {}
+local slot = 1
+local Order = 1
+local GetChar = function()
+    if Player.Character == nil then
+        repeat task.wait() until Player.Character ~= nil
+        return Player.Character
+    else
+        return Player.Character
+    end
+end
+--uicolors--
+
+local MenuGUI = game:GetService("Players").LocalPlayer.PlayerGui.MenuGUI
+local PlayerGui = game:GetService("Players").LocalPlayer.PlayerGui
+--Colors--
+MenuGUI.Open.BackgroundTransparency = 0.9
+MenuGUI.Open.DropShadow.Position = UDim2.new(0, 0, 0, 0)
+MenuGUI.Open.DropShadow.BackgroundTransparency = 1
+local UICornerOpen = Instance.new("UICorner")
+local UICornerOpen1 = Instance.new("UICorner")
+local UICornerOpen2 = Instance.new("UICorner")
+local UICornerOpen3 = Instance.new("UICorner")
+local UICornerOpen4 = Instance.new("UICorner")
+local UICornerOpen5 = Instance.new("UICorner")
+local UICornerOpen6 = Instance.new("UICorner")
+local UICornerOpen7 = Instance.new("UICorner")
+local UICornerOpen8 = Instance.new("UICorner")
+local UICornerOpen9 = Instance.new("UICorner")
+local UICornerOpen10 = Instance.new("UICorner")
+local UICornerOpen11 = Instance.new("UICorner")
+local UIStrokeOpen = Instance.new("UIStroke")
+local UIStrokeOpen1 = Instance.new("UIStroke")
+local UIStrokeOpen2 = Instance.new("UIStroke")
+UICornerOpen.Parent = MenuGUI.Open
+UICornerOpen.CornerRadius = UDim.new(0, 20)
+UICornerOpen1.Parent = MenuGUI.Open.DropShadow
+UICornerOpen1.CornerRadius = UDim.new(0, 20)
+UIStrokeOpen.Parent = MenuGUI.Open.DropShadow
+UIStrokeOpen.Color = Color3.fromRGB(255, 0, 0)
+UIStrokeOpen.Thickness = 2
+MenuGUI.Menu.Main.BackgroundTransparency = 0.9
+MenuGUI.Menu.Main.DropShadow.BackgroundTransparency = 1
+MenuGUI.Menu.Main.DropShadow.Position = UDim2.new(0, 0, 0, 0)
+UIStrokeOpen1.Parent = MenuGUI.Menu.Main.DropShadow
+UIStrokeOpen1.Thickness = 2
+UIStrokeOpen1.Color = Color3.fromRGB(0, 0, 0)
+MenuGUI.Menu.Main.Heading.Text = "LYO HUB "
+MenuGUI.Menu.Main.Heading.DropShadow.Visible = false
+UICornerOpen2.Parent = MenuGUI.Menu.Main.MenuItems.SaveLoad.TextLabel
+MenuGUI.Menu.Main.MenuItems.SaveLoad.TextLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+MenuGUI.Menu.Main.MenuItems.SaveLoad.TextLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+MenuGUI.Menu.Main.MenuItems.SaveLoad.TextLabel.BackgroundTransparency = 0.5
+MenuGUI.Menu.Main.MenuItems.SaveLoad.BackgroundTransparency = 1
+MenuGUI.Menu.Main.MenuItems.BuyMoney.BackgroundTransparency = 1
+MenuGUI.Menu.Main.MenuItems.BuyMoney.TextLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+MenuGUI.Menu.Main.MenuItems.BuyMoney.TextLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+MenuGUI.Menu.Main.MenuItems.BuyMoney.TextLabel.BackgroundTransparency = 0.5
+MenuGUI.Menu.Main.MenuItems.Changelog.BackgroundTransparency = 1
+MenuGUI.Menu.Main.MenuItems.Changelog.TextLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+MenuGUI.Menu.Main.MenuItems.Changelog.TextLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+MenuGUI.Menu.Main.MenuItems.Changelog.TextLabel.BackgroundTransparency = 0.5
+MenuGUI.Menu.Main.MenuItems.Credits.BackgroundTransparency = 1
+MenuGUI.Menu.Main.MenuItems.Credits.TextLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+MenuGUI.Menu.Main.MenuItems.Credits.TextLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+MenuGUI.Menu.Main.MenuItems.Credits.TextLabel.BackgroundTransparency = 0.5
+MenuGUI.Menu.Main.MenuItems.Donate.BackgroundTransparency = 1
+MenuGUI.Menu.Main.MenuItems.Donate.TextLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+MenuGUI.Menu.Main.MenuItems.Donate.TextLabel.BackgroundTransparency = 0.5
+MenuGUI.Menu.Main.MenuItems.Donate.TextLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+MenuGUI.Menu.Main.MenuItems.Settings.BackgroundTransparency = 1
+MenuGUI.Menu.Main.MenuItems.Settings.TextLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+MenuGUI.Menu.Main.MenuItems.Settings.TextLabel.BackgroundTransparency = 0.5
+MenuGUI.Menu.Main.MenuItems.Settings.TextLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+UICornerOpen3.Parent = MenuGUI.Menu.Main
+UICornerOpen3.CornerRadius = UDim.new(0, 20)
+UICornerOpen4.Parent = MenuGUI.Menu.Main.DropShadow
+UICornerOpen4.CornerRadius = UDim.new(0, 20)
+UICornerOpen5.Parent = MenuGUI.Menu.Main.MenuItems.Settings.TextLabel
+UICornerOpen6.Parent = MenuGUI.Menu.Main.MenuItems.Donate.TextLabel
+UICornerOpen7.Parent = MenuGUI.Menu.Main.MenuItems.Credits.TextLabel
+UICornerOpen8.Parent = MenuGUI.Menu.Main.MenuItems.Changelog.TextLabel
+UICornerOpen9.Parent = MenuGUI.Menu.Main.MenuItems.BuyMoney.TextLabel
+MenuGUI.Menu.Quit.BackgroundTransparency = 0.9
+MenuGUI.Menu.Quit.DropShadow.BackgroundTransparency = 1
+MenuGUI.Menu.Quit.DropShadow.Position = UDim2.new(0, 0, 0, 0)
+UICornerOpen10.Parent = MenuGUI.Menu.Quit.DropShadow
+UICornerOpen11.Parent = MenuGUI.Menu.Quit
+UIStrokeOpen2.Parent = MenuGUI.Menu.Quit.DropShadow
+UIStrokeOpen2.Color = Color3.fromRGB(35, 35, 35)
+UIStrokeOpen2.Thickness = 2
+
+for _, frame in ipairs(frames) do
+    if frame:IsA("Frame") then
+        frame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+    end
+    if frame:IsA("TextLabel") then
+        frame.TextColor3 = Color3.fromRGB(255, 255, 255)
+        frame.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
+    end
+    if frame:IsA("TextButton") then
+        frame.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
+    end
+    if frame:IsA("ScrollingFrame") then
+        frame.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
+    end
+end
+
+LocalPlayer.PlayerGui.MoneyDisplayGui.Text.DropShadow.Visible = false
+LocalPlayer.PlayerGui.Chat.Frame.ChatBarParentFrame.Frame.BoxFrame.Frame.ChatBar.TextColor3 = Color3.fromRGB(220, 220, 220)
 
