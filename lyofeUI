@@ -2,7 +2,8 @@
 local Players = game:GetService("Players")
 local localPlayer = Players.LocalPlayer
 local PlayerGui = localPlayer:WaitForChild("PlayerGui")
-local MenuGUI = PlayerGui:WaitForChild("MenuGUI")  
+local MenuGUI = Luxt
+
 
 -------------------------------------------------------------------
 
