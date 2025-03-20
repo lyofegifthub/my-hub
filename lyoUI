@@ -1,1 +1,131 @@
+-- UIAnces.lua
+local UIAnces = {}
+UIAnces.Tabs = {}
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
 
+-- Buat window utama
+function UIAnces:CreateWindow(title)
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "AncesUI"
+    screenGui.Parent = game.CoreGui
+
+    local mainFrame = Instance.new("Frame")
+    mainFrame.Name = "MainFrame"
+    mainFrame.Parent = screenGui
+    mainFrame.BackgroundColor3 = Color3.fromRGB(35,35,35)
+    mainFrame.Position = UDim2.new(0.5, -350, 0.5, -230)
+    mainFrame.Size = UDim2.new(0,700,0,460)
+    local mainCorner = Instance.new("UICorner", mainFrame)
+    mainCorner.CornerRadius = UDim.new(0,6)
+
+    local categoriesFrame = Instance.new("Frame")
+    categoriesFrame.Name = "Categories"
+    categoriesFrame.Parent = mainFrame
+    categoriesFrame.BackgroundColor3 = Color3.fromRGB(15,15,15)
+    categoriesFrame.Size = UDim2.new(0.25,0,1,0)
+    categoriesFrame.Position = UDim2.new(0,0,0,0)
+
+    local tabsContainer = Instance.new("ScrollingFrame")
+    tabsContainer.Name = "TabsContainer"
+    tabsContainer.Parent = categoriesFrame
+    tabsContainer.BackgroundTransparency = 1
+    tabsContainer.Position = UDim2.new(0,0,0.2,0)
+    tabsContainer.Size = UDim2.new(1,0,0.7,0)
+    tabsContainer.CanvasSize = UDim2.new(0,0,0,0)
+    tabsContainer.ScrollBarThickness = 0
+    local tabsLayout = Instance.new("UIListLayout", tabsContainer)
+    tabsLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    tabsLayout.Padding = UDim.new(0,5)
+
+    local pagesFolder = Instance.new("Folder")
+    pagesFolder.Name = "Pages"
+    pagesFolder.Parent = mainFrame
+
+    local window = {}
+    window.ScreenGui = screenGui
+    window.MainFrame = mainFrame
+    window.TabsContainer = tabsContainer
+    window.PagesFolder = pagesFolder
+    window.Title = title or "Ances UI"
+
+    function window:Tab(tabName)
+        local tab = {}
+        tab.Name = tabName
+
+        -- Buat tombol tab
+        local tabButton = Instance.new("TextButton")
+        tabButton.Name = "TabButton"
+        tabButton.Parent = tabsContainer
+        tabButton.Size = UDim2.new(1,0,0,30)
+        tabButton.BackgroundTransparency = 1
+        tabButton.Text = tabName
+        tabButton.Font = Enum.Font.GothamBold
+        tabButton.TextSize = 14
+        tabButton.TextColor3 = Color3.fromRGB(255,255,255)
+
+        -- Buat halaman tab
+        local page = Instance.new("ScrollingFrame")
+        page.Name = tabName .. "Page"
+        page.Parent = pagesFolder
+        page.BackgroundTransparency = 1
+        page.Size = UDim2.new(0.75,0,1,0)
+        page.CanvasSize = UDim2.new(0,0,0,0)
+        page.ScrollBarThickness = 0
+        local pageLayout = Instance.new("UIListLayout", page)
+        pageLayout.SortOrder = Enum.SortOrder.LayoutOrder
+        pageLayout.Padding = UDim.new(0,5)
+        page.Visible = (#UIAnces.Tabs == 0)
+
+        tab.Page = page
+        tab.Sections = {}
+
+        tabButton.MouseButton1Click:Connect(function()
+            for _, otherPage in ipairs(pagesFolder:GetChildren()) do
+                otherPage.Visible = false
+            end
+            page.Visible = true
+        end)
+
+        function tab:Section(sectionName)
+            local section = {}
+            section.Name = sectionName
+
+            local sectionFrame = Instance.new("Frame")
+            sectionFrame.Name = sectionName .. "Section"
+            sectionFrame.Parent = page
+            sectionFrame.BackgroundColor3 = Color3.fromRGB(25,25,25)
+            sectionFrame.Size = UDim2.new(1, -10, 0, 40)
+            local sectionTitle = Instance.new("TextLabel")
+            sectionTitle.Parent = sectionFrame
+            sectionTitle.BackgroundTransparency = 1
+            sectionTitle.Position = UDim2.new(0,5,0,0)
+            sectionTitle.Size = UDim2.new(1, -10, 0, 20)
+            sectionTitle.Font = Enum.Font.GothamBold
+            sectionTitle.Text = sectionName
+            sectionTitle.TextColor3 = Color3.fromRGB(153,255,238)
+            sectionTitle.TextSize = 14
+
+            function section:Button(text, callback)
+                local btn = Instance.new("TextButton")
+                btn.Parent = sectionFrame
+                btn.Size = UDim2.new(1,0,0,25)
+                btn.BackgroundColor3 = Color3.fromRGB(18,18,18)
+                btn.Font = Enum.Font.GothamBold
+                btn.Text = text or "Button"
+                btn.TextColor3 = Color3.fromRGB(255,255,255)
+                btn.TextSize = 14
+                btn.MouseButton1Click:Connect(callback)
+            end
+
+            return section
+        end
+
+        table.insert(UIAnces.Tabs, tab)
+        return tab
+    end
+
+    return window
+end
+
+return UIAnces
