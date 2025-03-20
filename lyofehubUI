@@ -1,1 +1,176 @@
+local SitGUI = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local SitButton = Instance.new("TextButton")
+local CloseButton = Instance.new("TextButton")
+local ToggleFrame = Instance.new("Frame")
+local ToggleButton = Instance.new("TextButton")
+local ToggleTitle = Instance.new("TextLabel")
+local SliderFrame = Instance.new("Frame")
+local SliderTitle = Instance.new("TextLabel")
+local SliderButton = Instance.new("TextButton")
+local SliderBackground = Instance.new("TextButton")
 
+-- Properties for ancestor UI
+SitGUI.Name = "SitGUI"
+SitGUI.Parent = game.CoreGui
+
+Frame.Parent = SitGUI
+Frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+Frame.Position = UDim2.new(0.5, -100, 0.5, -100)
+Frame.Size = UDim2.new(0, 250, 0, 300) -- Expanded size to fit new elements
+Frame.Active = true
+Frame.Draggable = true
+
+SitButton.Name = "SitButton"
+SitButton.Parent = Frame
+SitButton.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
+SitButton.Position = UDim2.new(0.1, 0, 0.1, 0)
+SitButton.Size = UDim2.new(0.8, 0, 0.15, 0)
+SitButton.Font = Enum.Font.SourceSansBold
+SitButton.Text = "Press to sit!"
+SitButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+SitButton.TextSize = 20
+
+CloseButton.Name = "CloseButton"
+CloseButton.Parent = Frame
+CloseButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+CloseButton.Position = UDim2.new(0.9, -20, 0, 5)
+CloseButton.Size = UDim2.new(0, 20, 0, 20)
+CloseButton.Font = Enum.Font.SourceSansBold
+CloseButton.Text = "X"
+CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+CloseButton.TextSize = 16
+
+-- Toggle from lyofe UI
+ToggleFrame.Name = "ToggleFrame"
+ToggleFrame.Parent = Frame
+ToggleFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+ToggleFrame.Position = UDim2.new(0.1, 0, 0.3, 0)
+ToggleFrame.Size = UDim2.new(0.8, 0, 0.15, 0)
+
+ToggleTitle.Name = "ToggleTitle"
+ToggleTitle.Parent = ToggleFrame
+ToggleTitle.BackgroundTransparency = 1
+ToggleTitle.Position = UDim2.new(0, 5, 0, 0)
+ToggleTitle.Size = UDim2.new(0.6, 0, 1, 0)
+ToggleTitle.Font = Enum.Font.GothamBold
+ToggleTitle.Text = "Auto Sit"
+ToggleTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToggleTitle.TextSize = 14
+ToggleTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+ToggleButton.Name = "ToggleButton"
+ToggleButton.Parent = ToggleFrame
+ToggleButton.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+ToggleButton.Position = UDim2.new(0.75, 0, 0.2, 0)
+ToggleButton.Size = UDim2.new(0.2, 0, 0.6, 0)
+ToggleButton.Font = Enum.Font.SourceSans
+ToggleButton.Text = ""
+ToggleButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+ToggleButton.TextSize = 14
+
+local ToggleIndicator = Instance.new("TextButton")
+ToggleIndicator.Parent = ToggleButton
+ToggleIndicator.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+ToggleIndicator.Position = UDim2.new(0, 0, 0, 0)
+ToggleIndicator.Size = UDim2.new(0.4, 0, 1, 0)
+ToggleIndicator.Font = Enum.Font.SourceSans
+ToggleIndicator.Text = ""
+ToggleIndicator.TextSize = 14
+
+-- Slider from lyofe UI
+SliderFrame.Name = "SliderFrame"
+SliderFrame.Parent = Frame
+SliderFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+SliderFrame.Position = UDim2.new(0.1, 0, 0.5, 0)
+SliderFrame.Size = UDim2.new(0.8, 0, 0.15, 0)
+
+SliderTitle.Name = "SliderTitle"
+SliderTitle.Parent = SliderFrame
+SliderTitle.BackgroundTransparency = 1
+SliderTitle.Position = UDim2.new(0, 5, 0, 0)
+SliderTitle.Size = UDim2.new(0.6, 0, 0.4, 0)
+SliderTitle.Font = Enum.Font.GothamBold
+SliderTitle.Text = "Walk Speed"
+SliderTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+SliderTitle.TextSize = 14
+SliderTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+SliderBackground.Name = "SliderBackground"
+SliderBackground.Parent = SliderFrame
+SliderBackground.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+SliderBackground.Position = UDim2.new(0, 5, 0.5, 0)
+SliderBackground.Size = UDim2.new(0.9, 0, 0.3, 0)
+SliderBackground.Font = Enum.Font.SourceSans
+SliderBackground.Text = ""
+SliderBackground.TextSize = 14
+
+SliderButton.Name = "SliderButton"
+SliderButton.Parent = SliderBackground
+SliderButton.BackgroundColor3 = Color3.fromRGB(0, 122, 255)
+SliderButton.Position = UDim2.new(0, 0, 0, 0)
+SliderButton.Size = UDim2.new(0.1, 0, 1, 0)
+SliderButton.Font = Enum.Font.SourceSans
+SliderButton.Text = ""
+SliderButton.TextSize = 14
+
+-- Functionality
+local TweenService = game:GetService("TweenService")
+local player = game.Players.LocalPlayer
+local humanoid = player.Character and player.Character:FindFirstChild("Humanoid")
+local isToggled = false
+local defaultSpeed = 16
+local maxSpeed = 50
+
+SitButton.MouseButton1Click:Connect(function()
+    if humanoid then
+        humanoid.Sit = true
+    end
+end)
+
+CloseButton.MouseButton1Click:Connect(function()
+    SitGUI:Destroy()
+end)
+
+ToggleButton.MouseButton1Click:Connect(function()
+    isToggled = not isToggled
+    if isToggled then
+        TweenService:Create(ToggleIndicator, TweenInfo.new(0.1), {Position = UDim2.new(0.6, 0, 0, 0)}):Play()
+        ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 122, 255)
+        if humanoid then
+            humanoid.Sit = true
+        end
+    else
+        TweenService:Create(ToggleIndicator, TweenInfo.new(0.1), {Position = UDim2.new(0, 0, 0, 0)}):Play()
+        ToggleButton.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+    end
+end)
+
+local draggingSlider = false
+SliderButton.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        draggingSlider = true
+    end
+end)
+
+SliderButton.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        draggingSlider = false
+    end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+    if draggingSlider and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local relativeX = math.clamp((input.Position.X - SliderBackground.AbsolutePosition.X) / SliderBackground.AbsoluteSize.X, 0, 1)
+        SliderButton.Position = UDim2.new(relativeX - (SliderButton.Size.X.Scale / 2), 0, 0, 0)
+        if humanoid then
+            humanoid.WalkSpeed = defaultSpeed + (relativeX * (maxSpeed - defaultSpeed))
+        end
+    end
+end)
+
+-- Update humanoid reference when character respawns
+player.CharacterAdded:Connect(function(character)
+    humanoid = character:WaitForChild("Humanoid")
+    humanoid.WalkSpeed = defaultSpeed
+end)
