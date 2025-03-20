@@ -4,7 +4,7 @@ UIAnces.Tabs = {}
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 
--- Buat window utama
+-- Fungsi untuk membuat window utama
 function UIAnces:CreateWindow(title)
     local screenGui = Instance.new("ScreenGui")
     screenGui.Name = "AncesUI"
@@ -49,11 +49,12 @@ function UIAnces:CreateWindow(title)
     window.PagesFolder = pagesFolder
     window.Title = title or "Ances UI"
 
+    -- Fungsi untuk membuat tab baru
     function window:Tab(tabName)
         local tab = {}
         tab.Name = tabName
 
-        -- Buat tombol tab
+        -- Tombol tab
         local tabButton = Instance.new("TextButton")
         tabButton.Name = "TabButton"
         tabButton.Parent = tabsContainer
@@ -64,7 +65,7 @@ function UIAnces:CreateWindow(title)
         tabButton.TextSize = 14
         tabButton.TextColor3 = Color3.fromRGB(255,255,255)
 
-        -- Buat halaman tab
+        -- Halaman (page) tab
         local page = Instance.new("ScrollingFrame")
         page.Name = tabName .. "Page"
         page.Parent = pagesFolder
@@ -75,7 +76,7 @@ function UIAnces:CreateWindow(title)
         local pageLayout = Instance.new("UIListLayout", page)
         pageLayout.SortOrder = Enum.SortOrder.LayoutOrder
         pageLayout.Padding = UDim.new(0,5)
-        page.Visible = (#UIAnces.Tabs == 0)
+        page.Visible = (#UIAnces.Tabs == 0) -- Tab pertama tampil
 
         tab.Page = page
         tab.Sections = {}
@@ -87,6 +88,7 @@ function UIAnces:CreateWindow(title)
             page.Visible = true
         end)
 
+        -- Fungsi untuk membuat section di dalam tab
         function tab:Section(sectionName)
             local section = {}
             section.Name = sectionName
@@ -96,7 +98,11 @@ function UIAnces:CreateWindow(title)
             sectionFrame.Parent = page
             sectionFrame.BackgroundColor3 = Color3.fromRGB(25,25,25)
             sectionFrame.Size = UDim2.new(1, -10, 0, 40)
+            local sectionCorner = Instance.new("UICorner", sectionFrame)
+            sectionCorner.CornerRadius = UDim.new(0,5)
+
             local sectionTitle = Instance.new("TextLabel")
+            sectionTitle.Name = "SectionTitle"
             sectionTitle.Parent = sectionFrame
             sectionTitle.BackgroundTransparency = 1
             sectionTitle.Position = UDim2.new(0,5,0,0)
@@ -106,16 +112,142 @@ function UIAnces:CreateWindow(title)
             sectionTitle.TextColor3 = Color3.fromRGB(153,255,238)
             sectionTitle.TextSize = 14
 
+            -- Container untuk elemen tambahan (berukuran dinamis)
+            local container = Instance.new("Frame")
+            container.Name = "Container"
+            container.Parent = sectionFrame
+            container.BackgroundTransparency = 1
+            container.Position = UDim2.new(0,5,0,25)
+            container.Size = UDim2.new(1, -10, 0, 15)
+            local containerLayout = Instance.new("UIListLayout", container)
+            containerLayout.SortOrder = Enum.SortOrder.LayoutOrder
+            containerLayout.Padding = UDim.new(0,3)
+
+            section.Container = container
+
+            -- Fungsi untuk menambahkan Label
+            function section:Label(text)
+                local label = Instance.new("TextLabel")
+                label.Name = "Label"
+                label.Parent = self.Container
+                label.BackgroundTransparency = 1
+                label.Size = UDim2.new(1,0,0,20)
+                label.Font = Enum.Font.Gotham
+                label.Text = text or ""
+                label.TextColor3 = Color3.fromRGB(255,255,255)
+                label.TextSize = 14
+            end
+
+            -- Fungsi untuk menambahkan Button
             function section:Button(text, callback)
                 local btn = Instance.new("TextButton")
-                btn.Parent = sectionFrame
+                btn.Name = "Button"
+                btn.Parent = self.Container
                 btn.Size = UDim2.new(1,0,0,25)
                 btn.BackgroundColor3 = Color3.fromRGB(18,18,18)
                 btn.Font = Enum.Font.GothamBold
-                btn.Text = text or "Button"
+                btn.Text = text or ""
                 btn.TextColor3 = Color3.fromRGB(255,255,255)
                 btn.TextSize = 14
+                btn.AutoButtonColor = false
                 btn.MouseButton1Click:Connect(callback)
+            end
+
+            -- Fungsi untuk menambahkan Toggle
+            function section:Toggle(text, default, callback)
+                local toggle = Instance.new("TextButton")
+                toggle.Name = "Toggle"
+                toggle.Parent = self.Container
+                toggle.Size = UDim2.new(1,0,0,25)
+                toggle.BackgroundColor3 = Color3.fromRGB(18,18,18)
+                toggle.Font = Enum.Font.GothamBold
+                local state = default or false
+                toggle.Text = text .. ": " .. tostring(state)
+                toggle.TextColor3 = Color3.fromRGB(255,255,255)
+                toggle.TextSize = 14
+                toggle.AutoButtonColor = false
+                toggle.MouseButton1Click:Connect(function()
+                    state = not state
+                    toggle.Text = text .. ": " .. tostring(state)
+                    if callback then callback(state) end
+                end)
+            end
+
+            -- Fungsi untuk menambahkan Slider
+            function section:Slider(text, min, max, default, callback)
+                local sliderFrame = Instance.new("Frame")
+                sliderFrame.Name = "Slider"
+                sliderFrame.Parent = self.Container
+                sliderFrame.Size = UDim2.new(1,0,0,25)
+                sliderFrame.BackgroundColor3 = Color3.fromRGB(15,15,15)
+                local sliderCorner = Instance.new("UICorner", sliderFrame)
+                sliderCorner.CornerRadius = UDim.new(0,5)
+
+                local sliderLabel = Instance.new("TextLabel")
+                sliderLabel.Name = "SliderLabel"
+                sliderLabel.Parent = sliderFrame
+                sliderLabel.BackgroundTransparency = 1
+                sliderLabel.Position = UDim2.new(0,5,0,0)
+                sliderLabel.Size = UDim2.new(0.4,0,1,0)
+                sliderLabel.Font = Enum.Font.Gotham
+                sliderLabel.Text = text .. ": " .. default
+                sliderLabel.TextColor3 = Color3.fromRGB(255,255,255)
+                sliderLabel.TextSize = 14
+
+                local sliderBG = Instance.new("Frame")
+                sliderBG.Name = "SliderBG"
+                sliderBG.Parent = sliderFrame
+                sliderBG.BackgroundColor3 = Color3.fromRGB(30,30,30)
+                sliderBG.Position = UDim2.new(0.45,0,0.2,0)
+                sliderBG.Size = UDim2.new(0.5,0,0.6,0)
+
+                local sliderFill = Instance.new("Frame")
+                sliderFill.Name = "SliderFill"
+                sliderFill.Parent = sliderBG
+                sliderFill.BackgroundColor3 = Color3.fromRGB(0,122,255)
+                sliderFill.Size = UDim2.new((default - min)/(max - min),0,1,0)
+
+                sliderBG.InputBegan:Connect(function(input)
+                    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                        local function moveSlider()
+                            local mousePos = UserInputService:GetMouseLocation().X - sliderBG.AbsolutePosition.X
+                            local newScale = math.clamp(mousePos/sliderBG.AbsoluteSize.X, 0, 1)
+                            sliderFill.Size = UDim2.new(newScale, 0, 1, 0)
+                            local value = math.floor(min + newScale*(max - min))  -- Bulatkan nilai
+                            sliderLabel.Text = text .. ": " .. value
+                            if callback then callback(value) end
+                        end
+                        moveSlider()
+                        local moveCon; moveCon = UserInputService.InputChanged:Connect(function(inp)
+                            if inp.UserInputType == Enum.UserInputType.MouseMovement then
+                                moveSlider()
+                            end
+                        end)
+                        input.Changed:Connect(function()
+                            if input.UserInputState == Enum.UserInputState.End then
+                                moveCon:Disconnect()
+                            end
+                        end)
+                    end
+                end)
+            end
+
+            -- Fungsi untuk menambahkan TextBox
+            function section:TextBox(text, placeholder, callback)
+                local tb = Instance.new("TextBox")
+                tb.Name = "TextBox"
+                tb.Parent = self.Container
+                tb.Size = UDim2.new(1,0,0,25)
+                tb.BackgroundColor3 = Color3.fromRGB(18,18,18)
+                tb.Font = Enum.Font.Gotham
+                tb.Text = text or ""
+                tb.PlaceholderText = placeholder or ""
+                tb.TextColor3 = Color3.fromRGB(255,255,255)
+                tb.TextSize = 14
+                tb.ClearTextOnFocus = false
+                tb.FocusLost:Connect(function()
+                    if callback then callback(tb.Text) end
+                end)
             end
 
             return section
@@ -125,7 +257,19 @@ function UIAnces:CreateWindow(title)
         return tab
     end
 
+    window.Tab = function(self, tabName) -- Memudahkan akses tab yang sudah dibuat
+        for _, tab in ipairs(UIAnces.Tabs) do
+            if tab.Name == tabName then
+                return tab
+            end
+        end
+    end
+
     return window
+end
+
+function UIAnces:Initiate()
+    return self
 end
 
 return UIAnces
